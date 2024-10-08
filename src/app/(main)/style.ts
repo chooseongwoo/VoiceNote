@@ -23,7 +23,7 @@ export const Title = styled.p`
 `;
 
 export const Content = styled.div`
-  padding: 16px 20px 30px;
+  padding: 16px 20px 90px;
 `;
 
 export const Label = styled.p`

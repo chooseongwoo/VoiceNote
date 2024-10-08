@@ -1,7 +1,9 @@
+"use client";
 import Logo from "@/assets/Logo";
 import * as _ from "./style";
 import TTSField from "@/components/TTSInputField";
 import NewsBox from "@/components/NewsBox";
+import MenuBar from "@/components/MenuBar";
 
 export default function Main() {
   return (
@@ -23,6 +25,7 @@ export default function Main() {
           <NewsBox />
         </_.NewsList>
       </_.Content>
+      <MenuBar selectState={1} />
     </_.Layout>
   );
 }
