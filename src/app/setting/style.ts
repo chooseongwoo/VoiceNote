@@ -28,3 +28,45 @@ export const Content = styled.div`
   flex-direction: column;
   gap: 30px;
 `;
+
+export const Label = styled.p`
+  font-size: 16px;
+  font-weight: 500;
+`;
+
+export const SelectContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
+export const Select = styled.select`
+  width: 100%;
+  height: 50px;
+  border: 1px solid #3dd612;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  font-size: 16px;
+  &:focus {
+    outline: none;
+    border-color: #2ca905;
+  }
+  color: #000;
+`;
+
+export const Option = styled.option`
+  font-size: 16px;
+  background-color: #ffffff;
+  color: #000;
+`;
+
+export const Button = styled.button`
+  width: 100%;
+  padding: 10px 0px 11px;
+  border-radius: 10px;
+  background-color: ${(props) => (1 ? "#3dd612" : "#bcbcbc")};
+  color: #fff;
+  font-size: 24px;
+  font-weight: 500;
+  margin-top: 80%;
+`;

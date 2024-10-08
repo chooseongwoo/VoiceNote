@@ -34,6 +34,14 @@ export default function Setting() {
           value={tone}
           handleChange={handleToneChange}
         />
+        <_.SelectContainer>
+          <_.Label>음성 성별</_.Label>
+          <_.Select>
+            <_.Option value="남성">남성</_.Option>
+            <_.Option value="여성">여성</_.Option>
+          </_.Select>
+        </_.SelectContainer>
+        <_.Button>확인</_.Button>
       </_.Content>
       <MenuBar selectState={3} />
     </_.Layout>
