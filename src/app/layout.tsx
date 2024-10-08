@@ -1,13 +1,11 @@
-import "@/styles/globals.css";
+import StyledComponentsRegistry from "@/lib/StyledComponentsRegistry";
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="ko">
-      <body>{children}</body>
-    </html>
-  );
-}
+const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => (
+  <html lang="en">
+    <body>
+      <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+    </body>
+  </html>
+);
+
+export default RootLayout;
