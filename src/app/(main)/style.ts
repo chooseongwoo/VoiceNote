@@ -23,5 +23,18 @@ export const Title = styled.p`
 `;
 
 export const Content = styled.div`
-  padding: 16px 20px 0;
+  padding: 16px 20px 30px;
+`;
+
+export const Label = styled.p`
+  color: #000;
+  font-size: 16px;
+  font-weight: 500;
+`;
+
+export const NewsList = styled.div`
+  padding-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 `;
