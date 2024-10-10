@@ -1,8 +1,23 @@
+"use client";
+import { useState } from "react";
 import TTSInputField from "@/components/TTSInputField";
 import * as _ from "./style";
 import Play from "@/components/Play/page";
+import Text from "@/assets/Text";
+import Previous from "@/assets/Previous";
+import Next from "@/assets/Next";
+import FilledPlay from "@/assets/FilledPlay";
+import FilledStop from "@/assets/FilledStop";
+import Timer from "@/assets/Timer";
+import MenuBar from "@/components/MenuBar";
 
 export default function Playlist() {
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const handlePlayToggle = () => {
+    setIsPlaying(!isPlaying);
+  };
+
   return (
     <_.Layout>
       <_.Header>재생</_.Header>
@@ -18,9 +33,33 @@ export default function Playlist() {
           </_.TextBox>
           <_.PlayList>
             <Play order={1} title="오타니 쇼헤이이이이이이이 홈런???????" />
+            <Play order={2} title="오타니 쇼헤이이이이이이이 홈런???????" />
+            <Play order={3} title="오타니 쇼헤이이이이이이이 홈런???????" />
+            <Play order={4} title="오타니 쇼헤이이이이이이이 홈런???????" />
+            <Play order={5} title="오타니 쇼헤이이이이이이이 홈런???????" />
+            <Play order={6} title="오타니 쇼헤이이이이이이이 홈런???????" />
+            <Play order={7} title="오타니 쇼헤이이이이이이이 홈런???????" />
+            <Play order={8} title="오타니 쇼헤이이이이이이이 홈런???????" />
+            <Play order={9} title="오타니 쇼헤이이이이이이이 홈런???????" />
           </_.PlayList>
+          <_.Playing>
+            <_.PlayingText>재생 중</_.PlayingText>
+            <_.Label>오타니 쇼헤이 홈런???</_.Label>
+          </_.Playing>
+          <_.Buttons>
+            <Text />
+            <_.Center>
+              <Previous />
+              <_.FilledButton onClick={handlePlayToggle}>
+                {isPlaying ? <FilledStop /> : <FilledPlay />}
+              </_.FilledButton>
+              <Next />
+            </_.Center>
+            <Timer />
+          </_.Buttons>
         </_.PlayListBox>
       </_.Content>
+      <MenuBar selectState={2} />
     </_.Layout>
   );
 }
