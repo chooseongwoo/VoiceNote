@@ -6,12 +6,14 @@ export const Layout = styled.div`
   display: flex;
   border-bottom: 1px solid #000;
   justify-content: space-between;
+  width: 100%;
 `;
 
 export const TextBox = styled.div`
   display: flex;
   gap: 14px;
   align-items: center;
+  width: 100%;
 `;
 
 export const Order = styled.div`
@@ -21,11 +23,11 @@ export const Order = styled.div`
 `;
 
 export const Title = styled.div<{ isPlaying: boolean }>`
-  width: 90%;
+  width: 80%;
   color: ${({ isPlaying }) => (isPlaying ? "#3DD612" : "#000")};
   font-size: 16px;
   font-weight: 500;
-  overflow-x: hidden;
+  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 `;

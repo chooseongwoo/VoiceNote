@@ -69,4 +69,7 @@ export const DeleteAll = styled.p`
 
 export const PlayList = styled.div`
   padding-top: 7px;
+  height: 320px;
+  overflow-y: auto;
+  overflow-x: hidden;
 `;
