@@ -1,6 +1,7 @@
-export default function Text() {
+export default function Text(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
+      {...props}
       width="32"
       height="32"
       viewBox="0 0 32 32"

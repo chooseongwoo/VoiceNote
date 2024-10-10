@@ -8,7 +8,7 @@ export const Layout = styled.div`
   justify-content: space-between;
   align-items: center;
   position: fixed;
-  z-index: 9999;
+  z-index: 10;
   bottom: 0px;
   right: 0;
   padding: 0 80px 20px;

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TTSInputField from "@/components/TTSInputField";
 import * as _ from "./style";
 import Play from "@/components/Play/page";
@@ -10,12 +10,46 @@ import FilledPlay from "@/assets/FilledPlay";
 import FilledStop from "@/assets/FilledStop";
 import Timer from "@/assets/Timer";
 import MenuBar from "@/components/MenuBar";
+import TimerModal from "@/components/Modals/TimerModal";
 
 export default function Playlist() {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isTimerModalOpen, setIsTimerModalOpen] = useState(false);
+  const [timerValue, setTimerValue] = useState<number>(8);
+
+  useEffect(() => {
+    const savedTimerValue = localStorage.getItem("timerValue");
+    if (savedTimerValue) {
+      setTimerValue(Number(savedTimerValue));
+    }
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimerValue((prevValue) => {
+        if (prevValue > 0) {
+          return prevValue - 1;
+        } else {
+          clearInterval(interval);
+          return 0;
+        }
+      });
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handlePlayToggle = () => {
     setIsPlaying(!isPlaying);
+  };
+
+  const handleTimerModalClose = () => {
+    localStorage.setItem("timerValue", timerValue.toString());
+    setIsTimerModalOpen(false);
+  };
+
+  const handleTimerValueChange = (value: number) => {
+    setTimerValue(value);
   };
 
   return (
@@ -55,11 +89,18 @@ export default function Playlist() {
               </_.FilledButton>
               <Next />
             </_.Center>
-            <Timer />
+            <Timer onClick={() => setIsTimerModalOpen(true)} />
           </_.Buttons>
         </_.PlayListBox>
       </_.Content>
       <MenuBar selectState={2} />
+      {isTimerModalOpen && (
+        <TimerModal
+          value={timerValue}
+          onClose={handleTimerModalClose}
+          onValueChange={handleTimerValueChange}
+        />
+      )}
     </_.Layout>
   );
 }
