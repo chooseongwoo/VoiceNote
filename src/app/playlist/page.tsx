@@ -11,11 +11,13 @@ import FilledStop from "@/assets/FilledStop";
 import Timer from "@/assets/Timer";
 import MenuBar from "@/components/MenuBar";
 import TimerModal from "@/components/Modals/TimerModal";
+import TextModal from "@/components/Modals/TextModal";
 
 export default function Playlist() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isTimerModalOpen, setIsTimerModalOpen] = useState(false);
-  const [timerValue, setTimerValue] = useState<number>(8);
+  const [isTextModalOpen, setIsTextModalOpen] = useState(false);
+  const [timerValue, setTimerValue] = useState<number>(15);
 
   useEffect(() => {
     const savedTimerValue = localStorage.getItem("timerValue");
@@ -81,7 +83,12 @@ export default function Playlist() {
             <_.Label>오타니 쇼헤이 홈런???</_.Label>
           </_.Playing>
           <_.Buttons>
-            <Text />
+            <Text
+              onClick={() => {
+                setIsTextModalOpen(!isTextModalOpen);
+              }}
+              isOpened={isTextModalOpen}
+            />
             <_.Center>
               <Previous />
               <_.FilledButton onClick={handlePlayToggle}>
@@ -103,6 +110,9 @@ export default function Playlist() {
           onClose={handleTimerModalClose}
           onValueChange={handleTimerValueChange}
         />
+      )}
+      {isTextModalOpen && (
+        <TextModal onClose={() => setIsTextModalOpen(false)} />
       )}
     </_.Layout>
   );

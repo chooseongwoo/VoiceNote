@@ -1,15 +1,12 @@
-import React from "react";
-
-interface TimerProps extends React.SVGProps<SVGSVGElement> {
+interface OwnProps extends React.SVGProps<SVGSVGElement> {
   onClick: () => void;
   isOpened?: boolean;
 }
 
-export default function Timer({ onClick, isOpened, ...props }: TimerProps) {
+export default function Timer({ onClick, isOpened }: OwnProps) {
   return (
     <svg
       onClick={onClick}
-      {...props}
       width="32"
       height="32"
       viewBox="0 0 32 32"
