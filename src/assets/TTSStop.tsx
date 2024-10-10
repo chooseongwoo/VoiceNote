@@ -1,10 +1,15 @@
-export default function TTSStop() {
+interface OwnProps {
+  width?: string;
+  height?: string;
+}
+
+export default function TTSStop({ width, height }: OwnProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="36"
-      height="36"
-      viewBox="0 0 36 36"
+      width={width ? width : "36"}
+      height={height ? height : "36"}
+      viewBox={width && height ? `0 0${width} ${height}` : "0 0 36 36"}
       fill="none"
     >
       <path

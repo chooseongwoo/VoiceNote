@@ -1,6 +1,6 @@
 import * as _ from "./style";
 import Home from "@/assets/Home";
-import Play from "@/assets/Play";
+import Play from "@/assets/PlayIcon";
 import Setting from "@/assets/Setting";
 import { useRouter } from "next/navigation";
 

@@ -1,5 +1,5 @@
 import StyledComponentsRegistry from "@/lib/StyledComponentsRegistry";
-import "../styles/globals.css"
+import "../styles/globals.css";
 
 const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => (
   <html lang="en">
