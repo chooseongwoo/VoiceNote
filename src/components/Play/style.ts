@@ -21,9 +21,13 @@ export const Order = styled.div`
 `;
 
 export const Title = styled.div<{ isPlaying: boolean }>`
+  width: 90%;
   color: ${({ isPlaying }) => (isPlaying ? "#3DD612" : "#000")};
   font-size: 16px;
   font-weight: 500;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 export const Buttons = styled.div`

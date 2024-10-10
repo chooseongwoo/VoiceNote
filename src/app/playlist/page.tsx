@@ -17,7 +17,7 @@ export default function Playlist() {
             <_.DeleteAll>전체 삭제</_.DeleteAll>
           </_.TextBox>
           <_.PlayList>
-            <Play />
+            <Play order={1} title="오타니 쇼헤이이이이이이이 홈런???????" />
           </_.PlayList>
         </_.PlayListBox>
       </_.Content>
