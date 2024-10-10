@@ -89,7 +89,10 @@ export default function Playlist() {
               </_.FilledButton>
               <Next />
             </_.Center>
-            <Timer onClick={() => setIsTimerModalOpen(true)} />
+            <Timer
+              onClick={() => setIsTimerModalOpen(true)}
+              isOpened={isTimerModalOpen}
+            />
           </_.Buttons>
         </_.PlayListBox>
       </_.Content>
