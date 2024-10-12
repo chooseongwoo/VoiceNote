@@ -1,12 +1,13 @@
 import Add from "@/assets/Add";
 import * as _ from "./style";
+import { news } from "@/types/news";
 
-export default function NewsBox() {
+export default function NewsBox({ title, description }: news) {
   return (
     <_.Layout>
       <_.Left>
-        <_.Title>제목입니다</_.Title>
-        <_.Description>DescriptionDescriptionDescription</_.Description>
+        <_.Title>{title}</_.Title>
+        <_.Description>{description}</_.Description>
       </_.Left>
       <_.Button>
         <Add />
