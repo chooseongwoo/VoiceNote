@@ -12,6 +12,10 @@ export default function Main() {
   const [newsList, setNewsList] = useState<news[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  const getSavedNews = () => {
+    return JSON.parse(localStorage.getItem("savedNews") || "[]");
+  };
+
   useEffect(() => {
     setIsLoading(true);
     const getNewsData = async () => {
@@ -25,7 +29,19 @@ export default function Main() {
             .decode(item.description)
             .replace(/<\/?[^>]+(>|$)/g, ""),
         }));
-        setNewsList(decodedNews);
+
+        const savedNews = getSavedNews();
+
+        const filteredNews = decodedNews.filter(
+          (newsItem: any) =>
+            !savedNews.some(
+              (savedItem: news) =>
+                savedItem.title === newsItem.title &&
+                savedItem.description === newsItem.description
+            )
+        );
+
+        setNewsList(filteredNews);
         setIsLoading(false);
       } catch (error) {
         console.error("뉴스 데이터를 불러오는 중 오류 발생:", error);
@@ -34,6 +50,13 @@ export default function Main() {
 
     getNewsData();
   }, []);
+
+  const removeNewsItem = (indexToRemove: number) => {
+    setNewsList(
+      (prevList) =>
+        prevList?.filter((_, index) => index !== indexToRemove) || null
+    );
+  };
 
   return (
     <_.Layout>
@@ -52,6 +75,7 @@ export default function Main() {
                   key={index}
                   title={news.title}
                   description={news.description}
+                  removeNews={() => removeNewsItem(index)}
                 />
               ))}
         </_.NewsList>
