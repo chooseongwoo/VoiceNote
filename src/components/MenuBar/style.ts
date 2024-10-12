@@ -22,9 +22,9 @@ export const Icon = styled.div`
   align-items: center;
 `;
 
-export const Title = styled.div<{ select?: boolean }>`
+export const Title = styled.div<{ select?: string }>`
   text-align: center;
   font-size: 15px;
   font-weight: 400;
-  color: ${(props) => (props.select ? "#3dd612" : "#bcbcbc")};
+  color: ${(props) => (props.select == "true" ? "#3dd612" : "#bcbcbc")};
 `;

@@ -39,7 +39,9 @@ const MenuBar = ({ selectState }: MenuBarProps) => {
             <IconComponent
               fill={selectState === index + 1 ? "#3DD612" : "#BCBCBC"}
             />
-            <_.Title select={selectState === index + 1}>{item.title}</_.Title>
+            <_.Title select={selectState === index + 1 ? "true" : "false"}>
+              {item.title}
+            </_.Title>
           </_.Icon>
         );
       })}
