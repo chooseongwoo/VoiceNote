@@ -20,8 +20,10 @@ export default function Main() {
         const data = await res.json();
         const decodedNews = data.items.map((item: news) => ({
           ...item,
-          title: he.decode(item.title),
-          description: he.decode(item.description),
+          title: he.decode(item.title).replace(/<\/?[^>]+(>|$)/g, ""),
+          description: he
+            .decode(item.description)
+            .replace(/<\/?[^>]+(>|$)/g, ""),
         }));
         setNewsList(decodedNews);
         setIsLoading(false);
