@@ -1,7 +1,7 @@
 "use client";
 import Logo from "@/assets/Logo";
 import * as _ from "./style";
-import TTSField from "@/components/TTSInputField";
+import TTSInputField from "@/components/TTSInputField";
 import NewsBox from "@/components/NewsBox";
 import MenuBar from "@/components/MenuBar";
 import { useEffect, useState } from "react";
@@ -9,6 +9,7 @@ import { news } from "@/types/news";
 import he from "he";
 
 export default function Main() {
+  const [text, setText] = useState("");
   const [newsList, setNewsList] = useState<news[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -65,7 +66,7 @@ export default function Main() {
         <_.Title>Voice Note</_.Title>
       </_.Header>
       <_.Content>
-        <TTSField />
+        <TTSInputField value={text} onChange={setText} />
         <_.NewsList>
           <_.Label>뉴스 기사</_.Label>
           {isLoading

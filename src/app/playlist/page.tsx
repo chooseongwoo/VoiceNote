@@ -15,6 +15,7 @@ import TextModal from "@/components/Modals/TextModal";
 import { news } from "@/types/news";
 
 export default function Playlist() {
+  const [text, setText] = useState("");
   const [isPlaying, setIsPlaying] = useState(false);
   const [isTimerModalOpen, setIsTimerModalOpen] = useState(false);
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);
@@ -59,9 +60,9 @@ export default function Playlist() {
     setTimerValue(value);
   };
 
-  useEffect(() => {
-    localStorage.setItem("savedNews", JSON.stringify(newsList));
-  }, [newsList]);
+  const handleAddPlay = (value: string) => {
+    setNewsList([...newsList, { title: value, description: value }]);
+  };
 
   const handleDeletePlay = (index: number) => {
     const updatedNewsList = newsList.filter(
@@ -74,13 +75,23 @@ export default function Playlist() {
     setNewsList([]);
   };
 
+  useEffect(() => {
+    localStorage.setItem("savedNews", JSON.stringify(newsList));
+  }, [newsList]);
+
   return (
     <_.Layout>
       <_.Header>재생</_.Header>
       <_.Content>
         <_.TTSBox>
-          <TTSInputField />
-          <_.AddButton>재생 목록에 추가하기</_.AddButton>
+          <TTSInputField value={text} onChange={setText} />
+          <_.AddButton
+            onClick={() => {
+              handleAddPlay(text);
+            }}
+          >
+            재생 목록에 추가하기
+          </_.AddButton>
         </_.TTSBox>
         <_.PlayListBox>
           <_.TextBox>
