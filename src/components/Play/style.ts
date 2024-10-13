@@ -13,7 +13,7 @@ export const TextBox = styled.div`
   display: flex;
   gap: 14px;
   align-items: center;
-  width: 100%;
+  width: 80%;
 `;
 
 export const Order = styled.div`
@@ -23,7 +23,6 @@ export const Order = styled.div`
 `;
 
 export const Title = styled.div<{ isPlaying: boolean }>`
-  width: 80%;
   color: ${({ isPlaying }) => (isPlaying ? "#3DD612" : "#000")};
   font-size: 16px;
   font-weight: 500;
