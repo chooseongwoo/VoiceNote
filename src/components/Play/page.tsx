@@ -8,9 +8,10 @@ import HeadPhone from "@/assets/HeadPhone";
 interface OwnProps {
   order: number;
   title: string;
+  onDelete: () => void;
 }
 
-export default function Play({ order, title }: OwnProps) {
+export default function Play({ order, title, onDelete }: OwnProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   return (
     <_.Layout>
@@ -20,7 +21,11 @@ export default function Play({ order, title }: OwnProps) {
       </_.TextBox>
       <_.Buttons>
         {isPlaying ? null : <TTSStop width="28" />}
-        <TrashCan />
+        <TrashCan
+          onClick={() => {
+            onDelete;
+          }}
+        />
       </_.Buttons>
     </_.Layout>
   );

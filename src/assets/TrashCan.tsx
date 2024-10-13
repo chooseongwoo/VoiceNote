@@ -1,6 +1,11 @@
-export default function TrashCan() {
+interface OwnProps {
+  onClick: () => void;
+}
+
+export default function TrashCan({ onClick }: OwnProps) {
   return (
     <svg
+      onClick={onClick}
       width="28"
       height="28"
       viewBox="0 0 24 24"

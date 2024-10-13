@@ -12,12 +12,17 @@ import Timer from "@/assets/Timer";
 import MenuBar from "@/components/MenuBar";
 import TimerModal from "@/components/Modals/TimerModal";
 import TextModal from "@/components/Modals/TextModal";
+import { news } from "@/types/news";
 
 export default function Playlist() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isTimerModalOpen, setIsTimerModalOpen] = useState(false);
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);
   const [timerValue, setTimerValue] = useState<number>(15);
+  const [newsList, setNewsList] = useState<news[]>(() => {
+    const savedNews = localStorage.getItem("savedNews");
+    return savedNews ? JSON.parse(savedNews) : [];
+  });
 
   useEffect(() => {
     const savedTimerValue = localStorage.getItem("timerValue");
@@ -54,6 +59,21 @@ export default function Playlist() {
     setTimerValue(value);
   };
 
+  useEffect(() => {
+    localStorage.setItem("savedNews", JSON.stringify(newsList));
+  }, [newsList]);
+
+  const handleDeletePlay = (index: number) => {
+    const updatedNewsList = newsList.filter(
+      (_, newsIndex) => newsIndex !== index
+    );
+    setNewsList(updatedNewsList);
+  };
+
+  const handleDeleteAll = () => {
+    setNewsList([]);
+  };
+
   return (
     <_.Layout>
       <_.Header>재생</_.Header>
@@ -65,18 +85,17 @@ export default function Playlist() {
         <_.PlayListBox>
           <_.TextBox>
             <_.Label>재생 목록</_.Label>
-            <_.DeleteAll>전체 삭제</_.DeleteAll>
+            <_.DeleteAll onClick={handleDeleteAll}>전체 삭제</_.DeleteAll>
           </_.TextBox>
           <_.PlayList>
-            <Play order={1} title="오타니 쇼헤이이이이이이이 홈런???????" />
-            <Play order={2} title="오타니 쇼헤이이이이이이이 홈런???????" />
-            <Play order={3} title="오타니 쇼헤이이이이이이이 홈런???????" />
-            <Play order={4} title="오타니 쇼헤이이이이이이이 홈런???????" />
-            <Play order={5} title="오타니 쇼헤이이이이이이이 홈런???????" />
-            <Play order={6} title="오타니 쇼헤이이이이이이이 홈런???????" />
-            <Play order={7} title="오타니 쇼헤이이이이이이이 홈런???????" />
-            <Play order={8} title="오타니 쇼헤이이이이이이이 홈런???????" />
-            <Play order={9} title="오타니 쇼헤이이이이이이이 홈런???????" />
+            {newsList?.map((news: news, index: number) => (
+              <Play
+                order={1}
+                key={index}
+                title={news.title}
+                onDelete={() => handleDeletePlay(index)}
+              />
+            ))}
           </_.PlayList>
           <_.Playing>
             <_.PlayingText>재생 중</_.PlayingText>

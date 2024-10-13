@@ -21,8 +21,6 @@ export default function NewsBox({
 
     localStorage.setItem("savedNews", JSON.stringify(updatedNewsList));
 
-    console.log("News saved:", updatedNewsList);
-
     removeNews();
   }, [title, description, removeNews]);
 
