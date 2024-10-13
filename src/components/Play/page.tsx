@@ -21,11 +21,7 @@ export default function Play({ order, title, onDelete }: OwnProps) {
       </_.TextBox>
       <_.Buttons>
         {isPlaying ? null : <TTSStop width="28" />}
-        <TrashCan
-          onClick={() => {
-            onDelete;
-          }}
-        />
+        <TrashCan onClick={onDelete} />
       </_.Buttons>
     </_.Layout>
   );

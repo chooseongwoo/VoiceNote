@@ -61,7 +61,10 @@ export default function Playlist() {
   };
 
   const handleAddPlay = (value: string) => {
-    setNewsList([...newsList, { title: value, description: value }]);
+    if (text) {
+      setNewsList([...newsList, { title: value, description: value }]);
+    }
+    setText("");
   };
 
   const handleDeletePlay = (index: number) => {
@@ -101,8 +104,8 @@ export default function Playlist() {
           <_.PlayList>
             {newsList?.map((news: news, index: number) => (
               <Play
-                order={1}
                 key={index}
+                order={index + 1}
                 title={news.title}
                 onDelete={() => handleDeletePlay(index)}
               />
