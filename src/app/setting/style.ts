@@ -59,14 +59,3 @@ export const Option = styled.option`
   background-color: #ffffff;
   color: #000;
 `;
-
-export const Button = styled.button`
-  width: 100%;
-  padding: 10px 0px 11px;
-  border-radius: 10px;
-  background-color: ${(props) => (1 ? "#3dd612" : "#bcbcbc")};
-  color: #fff;
-  font-size: 24px;
-  font-weight: 500;
-  margin-top: 80%;
-`;

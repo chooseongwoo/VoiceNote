@@ -54,7 +54,6 @@ export default function Setting() {
             <_.Option value="여성">여성</_.Option>
           </_.Select>
         </_.SelectContainer>
-        <_.Button>확인</_.Button>
       </_.Content>
       <MenuBar selectState={3} />
     </_.Layout>
