@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import TTSInputField from "@/components/TTSInputField";
 import * as _ from "./style";
 import Play from "@/components/Play";
@@ -24,6 +24,8 @@ export default function Playlist() {
     const savedNews = localStorage.getItem("savedNews");
     return savedNews ? JSON.parse(savedNews) : [];
   });
+  const newsListRef = useRef<HTMLDivElement | null>(null);
+  const playItemRefs = useRef<Array<HTMLDivElement | null>>([]);
 
   useEffect(() => {
     const savedTimerValue = localStorage.getItem("timerValue");
@@ -60,7 +62,17 @@ export default function Playlist() {
 
   useEffect(() => {
     localStorage.setItem("savedNews", JSON.stringify(newsList));
+    newsListRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [newsList]);
+
+  useEffect(() => {
+    if (playingIndex !== null && playItemRefs.current[playingIndex]) {
+      playItemRefs.current[playingIndex]?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, [playingIndex]);
 
   return (
     <_.Layout>
@@ -79,15 +91,23 @@ export default function Playlist() {
           </_.TextBox>
           <_.PlayList>
             {newsList?.map((news: news, index: number) => (
-              <Play
+              <div
                 key={index}
-                order={index + 1}
-                title={news.title}
-                onDelete={() => handleDeletePlay(index)}
-                isPlaying={playingIndex === index}
-                onPlayToggle={() => handlePlayToggle(index)}
-              />
+                ref={(el) => {
+                  playItemRefs.current[index] = el;
+                }}
+              >
+                <Play
+                  order={index + 1}
+                  title={news.title}
+                  onDelete={() => handleDeletePlay(index)}
+                  isPlaying={playingIndex === index}
+                  onPlayToggle={() => handlePlayToggle(index)}
+                />
+              </div>
             ))}
+
+            <div ref={newsListRef} />
           </_.PlayList>
           <_.Bottom>
             {playingIndex !== null && (
@@ -106,7 +126,7 @@ export default function Playlist() {
               <_.Center>
                 <Previous
                   onClick={() => {
-                    if (playingIndex! > 0) {
+                    if (playingIndex! > 0 && playingIndex !== null) {
                       handlePlayToggle(playingIndex! - 1);
                     } else {
                       handlePlayToggle(newsList.length - 1);
@@ -126,7 +146,10 @@ export default function Playlist() {
                 </_.FilledButton>
                 <Next
                   onClick={() => {
-                    if (playingIndex! < newsList.length - 1) {
+                    if (
+                      playingIndex !== null &&
+                      playingIndex! < newsList.length - 1
+                    ) {
                       handlePlayToggle(playingIndex! + 1);
                     } else {
                       handlePlayToggle(0);
