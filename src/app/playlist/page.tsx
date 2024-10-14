@@ -135,10 +135,17 @@ export default function Playlist() {
                 />
                 <_.FilledButton
                   onClick={() => {
-                    if (playingIndex !== null) {
-                      handlePlayToggle(null);
+                    if (
+                      JSON.parse(localStorage.getItem("savedNews") || "")
+                        ?.length > 0
+                    ) {
+                      if (playingIndex !== null) {
+                        handlePlayToggle(null);
+                      } else {
+                        handlePlayToggle(0);
+                      }
                     } else {
-                      handlePlayToggle(0);
+                      alert("재생 목록이 비어있습니다!");
                     }
                   }}
                 >
