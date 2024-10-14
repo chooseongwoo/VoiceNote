@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import TTSInputField from "@/components/TTSInputField";
 import * as _ from "./style";
-import Play from "@/components/Play/page";
+import Play from "@/components/Play/index";
 import Text from "@/assets/Text";
 import Previous from "@/assets/Previous";
 import Next from "@/assets/Next";
