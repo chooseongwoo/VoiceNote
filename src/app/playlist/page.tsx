@@ -125,7 +125,7 @@ export default function Playlist() {
             <_.Center>
               <Previous />
               <_.FilledButton onClick={handlePlayToggle}>
-                {isPlaying ? <FilledStop /> : <FilledPlay />}
+                {isPlaying ? <FilledPlay /> : <FilledStop />}
               </_.FilledButton>
               <Next />
             </_.Center>

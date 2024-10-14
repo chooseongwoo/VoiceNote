@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Layout = styled.div`
   width: 100vw;
-  height: 63vh;
+  height: 60vh;
   top: 60px;
   position: absolute;
   background-color: #fff;
