@@ -1,4 +1,4 @@
-export default function Next() {
+export default function Next({ ...props }: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       width="32"
@@ -6,6 +6,7 @@ export default function Next() {
       viewBox="0 0 32 32"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      {...props}
     >
       <g id="material-symbols:skip-next">
         <path

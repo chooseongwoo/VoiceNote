@@ -81,6 +81,13 @@ export const PlayList = styled.div`
   overflow-x: hidden;
 `;
 
+export const Bottom = styled.div`
+  display: flex;
+  height: 137px;
+  flex-direction: column;
+  justify-content: flex-end;
+`;
+
 export const Playing = styled.div`
   width: 100%;
   padding-top: 18px;

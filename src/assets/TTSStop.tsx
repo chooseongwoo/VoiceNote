@@ -1,11 +1,13 @@
 interface OwnProps {
   width?: string;
   height?: string;
+  onClick?: () => void;
 }
 
-export default function TTSStop({ width, height }: OwnProps) {
+export default function TTSStop({ width, height, onClick }: OwnProps) {
   return (
     <svg
+      onClick={onClick}
       xmlns="http://www.w3.org/2000/svg"
       width={width ? width : "36"}
       height={height ? height : "36"}

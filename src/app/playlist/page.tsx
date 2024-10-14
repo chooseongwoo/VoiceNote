@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import TTSInputField from "@/components/TTSInputField";
 import * as _ from "./style";
-import Play from "@/components/Play/index";
+import Play from "@/components/Play";
 import Text from "@/assets/Text";
 import Previous from "@/assets/Previous";
 import Next from "@/assets/Next";
@@ -16,7 +16,7 @@ import { news } from "@/types/news";
 
 export default function Playlist() {
   const [text, setText] = useState("");
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [playingIndex, setPlayingIndex] = useState<number | null>(null);
   const [isTimerModalOpen, setIsTimerModalOpen] = useState(false);
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);
   const [timerValue, setTimerValue] = useState<number>(15);
@@ -32,32 +32,8 @@ export default function Playlist() {
     }
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimerValue((prevValue) => {
-        if (prevValue > 0) {
-          return prevValue - 1;
-        } else {
-          clearInterval(interval);
-          return 0;
-        }
-      });
-    }, 60000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const handlePlayToggle = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const handleTimerModalClose = () => {
-    localStorage.setItem("timerValue", timerValue.toString());
-    setIsTimerModalOpen(false);
-  };
-
-  const handleTimerValueChange = (value: number) => {
-    setTimerValue(value);
+  const handlePlayToggle = (index: number | null) => {
+    setPlayingIndex(index);
   };
 
   const handleAddPlay = (value: string) => {
@@ -72,10 +48,14 @@ export default function Playlist() {
       (_, newsIndex) => newsIndex !== index
     );
     setNewsList(updatedNewsList);
+    if (playingIndex === index) {
+      setPlayingIndex(null);
+    }
   };
 
   const handleDeleteAll = () => {
     setNewsList([]);
+    setPlayingIndex(null);
   };
 
   useEffect(() => {
@@ -88,11 +68,7 @@ export default function Playlist() {
       <_.Content>
         <_.TTSBox>
           <TTSInputField value={text} onChange={setText} />
-          <_.AddButton
-            onClick={() => {
-              handleAddPlay(text);
-            }}
-          >
+          <_.AddButton onClick={() => handleAddPlay(text)}>
             재생 목록에 추가하기
           </_.AddButton>
         </_.TTSBox>
@@ -108,40 +84,70 @@ export default function Playlist() {
                 order={index + 1}
                 title={news.title}
                 onDelete={() => handleDeletePlay(index)}
+                isPlaying={playingIndex === index}
+                onPlayToggle={() => handlePlayToggle(index)}
               />
             ))}
           </_.PlayList>
-          <_.Playing>
-            <_.PlayingText>재생 중</_.PlayingText>
-            <_.Label>오타니 쇼헤이 홈런???</_.Label>
-          </_.Playing>
-          <_.Buttons>
-            <Text
-              onClick={() => {
-                setIsTextModalOpen(!isTextModalOpen);
-              }}
-              isOpened={isTextModalOpen}
-            />
-            <_.Center>
-              <Previous />
-              <_.FilledButton onClick={handlePlayToggle}>
-                {isPlaying ? <FilledPlay /> : <FilledStop />}
-              </_.FilledButton>
-              <Next />
-            </_.Center>
-            <Timer
-              onClick={() => setIsTimerModalOpen(true)}
-              isOpened={isTimerModalOpen}
-            />
-          </_.Buttons>
+          <_.Bottom>
+            {playingIndex !== null && (
+              <_.Playing>
+                <_.PlayingText>재생 중</_.PlayingText>
+                <_.Label>{newsList[playingIndex]?.title}</_.Label>
+              </_.Playing>
+            )}
+            <_.Buttons>
+              <Text
+                onClick={() => {
+                  setIsTextModalOpen(!isTextModalOpen);
+                }}
+                isOpened={isTextModalOpen}
+              />
+              <_.Center>
+                <Previous
+                  onClick={() => {
+                    if (playingIndex! > 0) {
+                      handlePlayToggle(playingIndex! - 1);
+                    } else {
+                      handlePlayToggle(newsList.length - 1);
+                    }
+                  }}
+                />
+                <_.FilledButton
+                  onClick={() => {
+                    if (playingIndex !== null) {
+                      handlePlayToggle(null);
+                    } else {
+                      handlePlayToggle(0);
+                    }
+                  }}
+                >
+                  {playingIndex !== null ? <FilledPlay /> : <FilledStop />}
+                </_.FilledButton>
+                <Next
+                  onClick={() => {
+                    if (playingIndex! < newsList.length - 1) {
+                      handlePlayToggle(playingIndex! + 1);
+                    } else {
+                      handlePlayToggle(0);
+                    }
+                  }}
+                />
+              </_.Center>
+              <Timer
+                onClick={() => setIsTimerModalOpen(true)}
+                isOpened={isTimerModalOpen}
+              />
+            </_.Buttons>
+          </_.Bottom>
         </_.PlayListBox>
       </_.Content>
       <MenuBar selectState={2} />
       {isTimerModalOpen && (
         <TimerModal
           value={timerValue}
-          onClose={handleTimerModalClose}
-          onValueChange={handleTimerValueChange}
+          onClose={() => setIsTimerModalOpen(false)}
+          onValueChange={setTimerValue}
         />
       )}
       {isTextModalOpen && (

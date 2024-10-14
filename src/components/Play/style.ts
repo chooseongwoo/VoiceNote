@@ -9,11 +9,12 @@ export const Layout = styled.div`
   width: 100%;
 `;
 
-export const TextBox = styled.div`
+export const TextBox = styled.div<{ isPlaying?: boolean }>`
   display: flex;
   gap: 14px;
   align-items: center;
   width: 80%;
+  margin-left: ${(props) => (props.isPlaying ? "-7px" : "")};
 `;
 
 export const Order = styled.div`
