@@ -79,7 +79,7 @@ export default function Playlist() {
       <_.Header>재생</_.Header>
       <_.Content>
         <_.TTSBox>
-          <TTSInputField value={text} onChange={setText} />
+          {/* <TTSInputField value={text} onChange={setText} /> */}
           <_.AddButton onClick={() => handleAddPlay(text)}>
             재생 목록에 추가하기
           </_.AddButton>

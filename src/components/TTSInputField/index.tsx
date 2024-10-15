@@ -1,6 +1,6 @@
 "use client";
 
-import { SetStateAction, useState } from "react";
+import { SetStateAction } from "react";
 import * as _ from "./style";
 import TTSPlay from "@/assets/TTSPlay";
 import TTSStop from "@/assets/TTSStop";
@@ -9,12 +9,14 @@ interface OwnProps {
   value: string;
   onChange: React.Dispatch<React.SetStateAction<string>>;
   onStart?: () => void;
+  onStop?: () => void;
   isPlaying?: boolean;
   setIsPlaying: React.Dispatch<SetStateAction<boolean>>;
 }
 
 export default function TTSInputField({
   onStart,
+  onStop,
   value,
   onChange,
   isPlaying,
@@ -32,8 +34,10 @@ export default function TTSInputField({
         <_.Button
           onClick={() => {
             setIsPlaying(!isPlaying);
-            if (onStart) {
-              onStart();
+            if (!isPlaying) {
+              onStart!();
+            } else {
+              onStop!();
             }
           }}
         >
