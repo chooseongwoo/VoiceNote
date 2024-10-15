@@ -39,8 +39,8 @@ export default function Playlist() {
   }, []);
 
   const handlePlayToggle = (index: number | null) => {
-    setPlayingIndex(index);
     if (index !== null) {
+      setPlayingIndex(index);
       const selectedNews: news = newsList[index];
       const { title, description } = selectedNews;
       const text =
@@ -48,21 +48,25 @@ export default function Playlist() {
           ? description
           : `제목: ${selectedNews.title}, 본문: ${selectedNews.description}`;
 
-      startTTS(text, setIsPlaying, () => {
+      startTTS(text, undefined, () => {
         const nextIndex = (index + 1) % newsList.length;
         handlePlayToggle(nextIndex);
       });
     } else {
       stopTTS();
-      setIsPlaying(false);
     }
   };
 
   const handleAddPlay = (value: string) => {
-    if (text) {
-      setNewsList([...newsList, { title: value, description: value }]);
+    if (value.trim()) {
+      setNewsList((prevList) => {
+        const newList = [...prevList, { title: value, description: value }];
+        return newList;
+      });
     }
     setText("");
+    stopTTS();
+    setPlayingIndex(null);
   };
 
   const handleDeletePlay = (index: number) => {
@@ -70,18 +74,21 @@ export default function Playlist() {
       (_, newsIndex) => newsIndex !== index
     );
     setNewsList(updatedNewsList);
-    if (playingIndex === index) {
-      setPlayingIndex(null);
-    }
-  };
-
-  const handleDeleteAll = () => {
-    setNewsList([]);
+    stopTTS();
     setPlayingIndex(null);
   };
 
+  const handleDeleteAll = () => {
+    stopTTS();
+    setPlayingIndex(null);
+    setNewsList([]);
+    localStorage.removeItem("savedNews");
+  };
+
   useEffect(() => {
-    localStorage.setItem("savedNews", JSON.stringify(newsList));
+    if (newsList.length > 0) {
+      localStorage.setItem("savedNews", JSON.stringify(newsList));
+    }
     newsListRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [newsList]);
 
@@ -94,6 +101,12 @@ export default function Playlist() {
     }
   }, [playingIndex]);
 
+  const toggleTimerModal = () => {
+    if (!isTextModalOpen) {
+      setIsTimerModalOpen((prev) => !prev);
+    }
+  };
+
   return (
     <_.Layout>
       <_.Header>재생</_.Header>
@@ -101,7 +114,7 @@ export default function Playlist() {
         <_.TTSBox>
           <TTSInputField
             onStart={() => {
-              startTTS(text, setIsPlaying);
+              startTTS(text);
             }}
             onStop={stopTTS}
             isPlaying={isPlaying}
@@ -135,7 +148,6 @@ export default function Playlist() {
                 />
               </div>
             ))}
-
             <div ref={newsListRef} />
           </_.PlayList>
           <_.Bottom>
@@ -148,27 +160,27 @@ export default function Playlist() {
             <_.Buttons>
               <Text
                 onClick={() => {
-                  if (playingIndex !== null)
+                  if (playingIndex !== null) {
                     setIsTextModalOpen(!isTextModalOpen);
+                  }
                 }}
                 isOpened={isTextModalOpen}
               />
               <_.Center>
                 <Previous
                   onClick={() => {
-                    if (playingIndex! > 0 && playingIndex !== null) {
-                      handlePlayToggle(playingIndex! - 1);
-                    } else {
-                      handlePlayToggle(newsList.length - 1);
+                    if (playingIndex !== null) {
+                      const newIndex =
+                        playingIndex > 0
+                          ? playingIndex - 1
+                          : newsList.length - 1;
+                      handlePlayToggle(newIndex);
                     }
                   }}
                 />
                 <_.FilledButton
                   onClick={() => {
-                    if (
-                      JSON.parse(localStorage.getItem("savedNews") || "")
-                        ?.length > 0
-                    ) {
+                    if (newsList.length > 0) {
                       if (playingIndex !== null) {
                         handlePlayToggle(null);
                         setIsTextModalOpen(false);
@@ -184,19 +196,17 @@ export default function Playlist() {
                 </_.FilledButton>
                 <Next
                   onClick={() => {
-                    if (
-                      playingIndex !== null &&
-                      playingIndex! < newsList.length - 1
-                    ) {
-                      handlePlayToggle(playingIndex! + 1);
-                    } else {
-                      handlePlayToggle(0);
+                    if (playingIndex !== null) {
+                      const newIndex = (playingIndex + 1) % newsList.length;
+                      handlePlayToggle(newIndex);
                     }
                   }}
                 />
               </_.Center>
               <Timer
-                onClick={() => setIsTimerModalOpen(true)}
+                onClick={() => {
+                  setIsTimerModalOpen(!isTimerModalOpen);
+                }}
                 isOpened={isTimerModalOpen}
               />
             </_.Buttons>

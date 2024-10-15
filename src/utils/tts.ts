@@ -33,7 +33,7 @@ export const startTTS = async (
     }
 
     audio.addEventListener("ended", () => {
-      setIsPlaying!(false);
+      if (setIsPlaying) setIsPlaying(false);
       if (onEnded) {
         onEnded();
       }
@@ -41,10 +41,10 @@ export const startTTS = async (
 
     currentAudio = audio;
     audio.play();
-    setIsPlaying!(true);
+    if (setIsPlaying) setIsPlaying(false);
   } catch (error) {
     console.error("TTS 변환 중 오류 발생:", error);
-    setIsPlaying!(false);
+    if (setIsPlaying) setIsPlaying(false);
   }
 };
 
