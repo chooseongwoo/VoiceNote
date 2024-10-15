@@ -7,8 +7,13 @@ export const startTTS = async (
   setIsPlaying: React.Dispatch<SetStateAction<boolean>>
 ) => {
   try {
+    const speed = localStorage.getItem("speed");
+    const pitch = localStorage.getItem("pitch");
+    const gender = localStorage.getItem("gender");
     const response = await fetch(
-      `/api/speech?text=${encodeURIComponent(text)}`
+      `/api/speech?text=${encodeURIComponent(
+        text
+      )}&speed=${speed}&pitch=${pitch}&gender=${gender}`
     );
     if (!response.ok) {
       setIsPlaying(false);

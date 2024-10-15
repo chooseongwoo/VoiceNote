@@ -7,9 +7,21 @@ const client = new TextToSpeechClient();
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const text = searchParams.get("text");
+  const speed = parseFloat(searchParams.get("speed") || "1.0");
+  const pitch = parseFloat(searchParams.get("pitch") || "0.0");
+  const gender = searchParams.get("gender") || "MALE";
 
   if (!text) {
     return NextResponse.json({ error: "텍스트 없음." }, { status: 400 });
+  }
+
+  let ssmlGender;
+  if (gender === "MALE") {
+    ssmlGender = protos.google.cloud.texttospeech.v1.SsmlVoiceGender.MALE;
+  } else if (gender === "FEMALE") {
+    ssmlGender = protos.google.cloud.texttospeech.v1.SsmlVoiceGender.FEMALE;
+  } else {
+    ssmlGender = protos.google.cloud.texttospeech.v1.SsmlVoiceGender.NEUTRAL;
   }
 
   try {
@@ -18,13 +30,13 @@ export async function GET(req: Request) {
         input: { text },
         voice: {
           languageCode: "ko-KR",
-          ssmlGender:
-            protos.google.cloud.texttospeech.v1.SsmlVoiceGender.NEUTRAL,
+          ssmlGender: ssmlGender,
         },
         audioConfig: {
           audioEncoding:
             protos.google.cloud.texttospeech.v1.AudioEncoding.LINEAR16,
-          speakingRate: 1,
+          speakingRate: speed,
+          pitch: pitch,
         },
       };
 
