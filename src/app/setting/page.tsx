@@ -7,8 +7,8 @@ import Slider from "@/components/Slider";
 export default function Setting() {
   const [values, setValues] = useState({
     speed: Number(localStorage.getItem("speed")) || 1.0,
-    tone: Number(localStorage.getItem("tone")) || 0.0,
-    gender: localStorage.getItem("gender") || "남성",
+    pitch: Number(localStorage.getItem("pitch")) || 0.0,
+    gender: localStorage.getItem("gender") || "NEUTRAL",
   });
 
   const handleSpeedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -17,10 +17,10 @@ export default function Setting() {
     localStorage.setItem("speed", newSpeed.toString());
   };
 
-  const handleToneChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newTone = Number(event.target.value);
-    setValues({ ...values, tone: newTone });
-    localStorage.setItem("tone", newTone.toString());
+  const handlePitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newPitch = Number(event.target.value);
+    setValues({ ...values, pitch: newPitch });
+    localStorage.setItem("pitch", newPitch.toString());
   };
 
   const handleGenderChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -44,14 +44,15 @@ export default function Setting() {
           label="음성 톤"
           min="-20"
           max="20"
-          value={values.tone}
-          handleChange={handleToneChange}
+          value={values.pitch}
+          handleChange={handlePitchChange}
         />
         <_.SelectContainer>
           <_.Label>음성 성별</_.Label>
           <_.Select value={values.gender} onChange={handleGenderChange}>
-            <_.Option value="남성">남성</_.Option>
-            <_.Option value="여성">여성</_.Option>
+            <_.Option value="MALE">남성</_.Option>
+            <_.Option value="NEUTRAL">중성</_.Option>
+            <_.Option value="FEMALE">여성</_.Option>
           </_.Select>
         </_.SelectContainer>
       </_.Content>

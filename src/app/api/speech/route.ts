@@ -19,7 +19,7 @@ export async function GET(req: Request) {
         voice: {
           languageCode: "ko-KR",
           ssmlGender:
-            protos.google.cloud.texttospeech.v1.SsmlVoiceGender.FEMALE,
+            protos.google.cloud.texttospeech.v1.SsmlVoiceGender.NEUTRAL,
         },
         audioConfig: {
           audioEncoding:
