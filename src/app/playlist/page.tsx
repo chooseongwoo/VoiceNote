@@ -22,10 +22,12 @@ export default function Playlist() {
   const [isTimerModalOpen, setIsTimerModalOpen] = useState(false);
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);
   const [timerValue, setTimerValue] = useState<number>(15);
+
   const [newsList, setNewsList] = useState<news[]>(() => {
     const savedNews = localStorage.getItem("savedNews");
     return savedNews ? JSON.parse(savedNews) : [];
   });
+
   const newsListRef = useRef<HTMLDivElement | null>(null);
   const playItemRefs = useRef<Array<HTMLDivElement | null>>([]);
 
@@ -38,6 +40,22 @@ export default function Playlist() {
 
   const handlePlayToggle = (index: number | null) => {
     setPlayingIndex(index);
+    if (index !== null) {
+      const selectedNews: news = newsList[index];
+      const { title, description } = selectedNews;
+      const text =
+        title === description
+          ? description
+          : `제목: ${selectedNews.title}, 본문: ${selectedNews.description}`;
+
+      startTTS(text, setIsPlaying, () => {
+        const nextIndex = (index + 1) % newsList.length;
+        handlePlayToggle(nextIndex);
+      });
+    } else {
+      stopTTS();
+      setIsPlaying(false);
+    }
   };
 
   const handleAddPlay = (value: string) => {

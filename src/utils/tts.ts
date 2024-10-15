@@ -4,19 +4,21 @@ let currentAudio: HTMLAudioElement | null = null;
 
 export const startTTS = async (
   text: string,
-  setIsPlaying: React.Dispatch<SetStateAction<boolean>>
+  setIsPlaying?: React.Dispatch<SetStateAction<boolean>>,
+  onEnded?: () => void
 ) => {
   try {
-    const speed = localStorage.getItem("speed");
-    const pitch = localStorage.getItem("pitch");
-    const gender = localStorage.getItem("gender");
+    const speed = localStorage.getItem("speed") || "1.0";
+    const pitch = localStorage.getItem("pitch") || "0.0";
+    const gender = localStorage.getItem("gender") || "MALE";
+
     const response = await fetch(
       `/api/speech?text=${encodeURIComponent(
         text
       )}&speed=${speed}&pitch=${pitch}&gender=${gender}`
     );
     if (!response.ok) {
-      setIsPlaying(false);
+      setIsPlaying!(false);
       throw new Error("TTS 변환 중 오류 발생");
     }
 
@@ -31,14 +33,18 @@ export const startTTS = async (
     }
 
     audio.addEventListener("ended", () => {
-      setIsPlaying(false);
+      setIsPlaying!(false);
+      if (onEnded) {
+        onEnded();
+      }
     });
 
     currentAudio = audio;
     audio.play();
+    setIsPlaying!(true);
   } catch (error) {
     console.error("TTS 변환 중 오류 발생:", error);
-    setIsPlaying(false);
+    setIsPlaying!(false);
   }
 };
 

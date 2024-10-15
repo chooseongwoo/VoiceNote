@@ -26,7 +26,7 @@ export default function Play({
         <_.Title isPlaying={isPlaying}>{title}</_.Title>
       </_.TextBox>
       <_.Buttons>
-        {isPlaying ? null : <TTSStop width="28" onClick={onPlayToggle} />}
+        {isPlaying ? null : <TTSStop width="28" onStart={onPlayToggle} />}
         <TrashCan onClick={onDelete} />
       </_.Buttons>
     </_.Layout>
