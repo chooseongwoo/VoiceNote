@@ -11,21 +11,27 @@ import { startTTS, stopTTS } from "@/utils/tts";
 
 export default function Main() {
   const [text, setText] = useState("");
-  const [newsList, setNewsList] = useState<news[] | null>(null);
+  const [newsList, setNewsList] = useState<news[]>([]);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const getSavedNews = () => {
-    const savedNews = localStorage.getItem("savedNews");
-    return savedNews ? JSON.parse(savedNews) : [];
-  };
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
+    const savedNews = localStorage.getItem("savedNews");
+    const initialNewsList = savedNews ? JSON.parse(savedNews) : [];
+    setNewsList(initialNewsList);
+  }, []);
+
+  useEffect(() => {
     const getNewsData = async () => {
+      setIsLoading(true);
       try {
         const res = await fetch("/api/news?query=정치");
         const data = await res.json();
+
+        if (!data.items) {
+          throw new Error("응답 없음.");
+        }
+
         const decodedNews = data.items.map((item: news) => ({
           ...item,
           title: he.decode(item.title).replace(/<\/?[^>]+(>|$)/g, ""),
@@ -34,11 +40,9 @@ export default function Main() {
             .replace(/<\/?[^>]+(>|$)/g, ""),
         }));
 
-        const savedNews = getSavedNews();
-
         const filteredNews = decodedNews.filter(
           (newsItem: any) =>
-            !savedNews.some(
+            !newsList.some(
               (savedItem: news) =>
                 savedItem.title === newsItem.title &&
                 savedItem.description === newsItem.description
@@ -46,9 +50,10 @@ export default function Main() {
         );
 
         setNewsList(filteredNews);
-        setIsLoading(false);
       } catch (error) {
-        console.error("뉴스 데이터를 불러오는 중 오류 발생:", error);
+        console.error("뉴스 데이터 페칭 에러", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -56,9 +61,8 @@ export default function Main() {
   }, []);
 
   const removeNewsItem = (indexToRemove: number) => {
-    setNewsList(
-      (prevList) =>
-        prevList?.filter((_, index) => index !== indexToRemove) || null
+    setNewsList((prevList) =>
+      prevList.filter((_, index) => index !== indexToRemove)
     );
   };
 
@@ -78,21 +82,23 @@ export default function Main() {
               setIsPlaying={setIsPlaying}
               value={text}
               onChange={setText}
-              onStart={() => {
-                startTTS(text, setIsPlaying);
-              }}
+              onStart={() => startTTS(text, setIsPlaying)}
               onStop={stopTTS}
             />
             <_.NewsList>
               <_.Label>뉴스 기사</_.Label>
-              {newsList?.map((news, index) => (
-                <NewsBox
-                  key={index}
-                  title={news.title}
-                  description={news.description}
-                  removeNews={() => removeNewsItem(index)}
-                />
-              ))}
+              {newsList.length > 0 ? (
+                newsList.map((news, index) => (
+                  <NewsBox
+                    key={index}
+                    title={news.title}
+                    description={news.description}
+                    removeNews={() => removeNewsItem(index)}
+                  />
+                ))
+              ) : (
+                <p>뉴스가 없습니다.</p>
+              )}
             </_.NewsList>
           </>
         )}

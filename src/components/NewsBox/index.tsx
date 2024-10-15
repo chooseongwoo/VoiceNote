@@ -1,3 +1,4 @@
+"use client";
 import Add from "@/assets/Add";
 import * as _ from "./style";
 import { news } from "@/types/news";
@@ -14,13 +15,9 @@ export default function NewsBox({
 }: NewsBoxProps) {
   const handleAddClick = useCallback(() => {
     const currentNews = { title, description };
-
     const savedNews = JSON.parse(localStorage.getItem("savedNews") || "[]");
-
     const updatedNewsList = [...savedNews, currentNews];
-
     localStorage.setItem("savedNews", JSON.stringify(updatedNewsList));
-
     removeNews();
   }, [title, description, removeNews]);
 

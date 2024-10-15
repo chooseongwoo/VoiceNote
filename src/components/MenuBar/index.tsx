@@ -1,3 +1,4 @@
+"use client";
 import * as _ from "./style";
 import Home from "@/assets/Home";
 import Play from "@/assets/PlayIcon";
@@ -10,16 +11,8 @@ interface MenuBarProps {
 
 const icons = [
   { icon: Home, title: "홈", location: "/" },
-  {
-    icon: Play,
-    title: "재생",
-    location: "/playlist",
-  },
-  {
-    icon: Setting,
-    title: "설정",
-    location: "/setting",
-  },
+  { icon: Play, title: "재생", location: "/playlist" },
+  { icon: Setting, title: "설정", location: "/setting" },
 ];
 
 const MenuBar = ({ selectState }: MenuBarProps) => {
