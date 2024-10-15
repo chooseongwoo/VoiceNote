@@ -1,6 +1,6 @@
-import { TextToSpeechClient } from "@google-cloud/text-to-speech";
 import { NextResponse } from "next/server";
-import { protos } from "@google-cloud/text-to-speech";
+
+import { protos, TextToSpeechClient } from "@google-cloud/text-to-speech";
 
 const client = new TextToSpeechClient();
 
@@ -19,7 +19,7 @@ export async function GET(req: Request) {
         voice: {
           languageCode: "ko-KR",
           ssmlGender:
-            protos.google.cloud.texttospeech.v1.SsmlVoiceGender.NEUTRAL,
+            protos.google.cloud.texttospeech.v1.SsmlVoiceGender.FEMALE,
         },
         audioConfig: {
           audioEncoding:

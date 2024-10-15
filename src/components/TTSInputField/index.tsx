@@ -11,7 +11,7 @@ interface OwnProps {
   onStart?: () => void;
   onStop?: () => void;
   isPlaying?: boolean;
-  setIsPlaying: React.Dispatch<SetStateAction<boolean>>;
+  setIsPlaying?: React.Dispatch<SetStateAction<boolean>>;
 }
 
 export default function TTSInputField({
@@ -33,7 +33,7 @@ export default function TTSInputField({
         />
         <_.Button
           onClick={() => {
-            setIsPlaying(!isPlaying);
+            setIsPlaying!(!isPlaying);
             if (!isPlaying) {
               onStart!();
             } else {

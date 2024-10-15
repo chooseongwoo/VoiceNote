@@ -11,6 +11,7 @@ export const startTTS = async (
       `/api/speech?text=${encodeURIComponent(text)}`
     );
     if (!response.ok) {
+      setIsPlaying(false);
       throw new Error("TTS 변환 중 오류 발생");
     }
 
@@ -32,6 +33,7 @@ export const startTTS = async (
     audio.play();
   } catch (error) {
     console.error("TTS 변환 중 오류 발생:", error);
+    setIsPlaying(false);
   }
 };
 

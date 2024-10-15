@@ -13,9 +13,11 @@ import MenuBar from "@/components/MenuBar";
 import TimerModal from "@/components/Modals/TimerModal";
 import TextModal from "@/components/Modals/TextModal";
 import { news } from "@/types/news";
+import { startTTS, stopTTS } from "@/utils/tts";
 
 export default function Playlist() {
   const [text, setText] = useState("");
+  const [isPlaying, setIsPlaying] = useState(false);
   const [playingIndex, setPlayingIndex] = useState<number | null>(null);
   const [isTimerModalOpen, setIsTimerModalOpen] = useState(false);
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);
@@ -79,7 +81,16 @@ export default function Playlist() {
       <_.Header>재생</_.Header>
       <_.Content>
         <_.TTSBox>
-          {/* <TTSInputField value={text} onChange={setText} /> */}
+          <TTSInputField
+            onStart={() => {
+              startTTS(text, setIsPlaying);
+            }}
+            onStop={stopTTS}
+            isPlaying={isPlaying}
+            setIsPlaying={setIsPlaying}
+            value={text}
+            onChange={setText}
+          />
           <_.AddButton onClick={() => handleAddPlay(text)}>
             재생 목록에 추가하기
           </_.AddButton>
