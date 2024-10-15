@@ -22,11 +22,14 @@ export default function Playlist() {
   const [isTimerModalOpen, setIsTimerModalOpen] = useState(false);
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);
   const [timerValue, setTimerValue] = useState<number>(15);
+  const [newsList, setNewsList] = useState<news[]>([]);
 
-  const [newsList, setNewsList] = useState<news[]>(() => {
+  useEffect(() => {
     const savedNews = localStorage.getItem("savedNews");
-    return savedNews ? JSON.parse(savedNews) : [];
-  });
+    if (savedNews) {
+      setNewsList(JSON.parse(savedNews));
+    }
+  }, []);
 
   const newsListRef = useRef<HTMLDivElement | null>(null);
   const playItemRefs = useRef<Array<HTMLDivElement | null>>([]);

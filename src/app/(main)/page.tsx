@@ -16,7 +16,8 @@ export default function Main() {
   const [isLoading, setIsLoading] = useState(false);
 
   const getSavedNews = () => {
-    return JSON.parse(localStorage.getItem("savedNews") || "[]");
+    const savedNews = localStorage.getItem("savedNews");
+    return savedNews ? JSON.parse(savedNews) : [];
   };
 
   useEffect(() => {
@@ -68,21 +69,23 @@ export default function Main() {
         <_.Title>Voice Note</_.Title>
       </_.Header>
       <_.Content>
-        <TTSInputField
-          isPlaying={isPlaying}
-          setIsPlaying={setIsPlaying}
-          value={text}
-          onChange={setText}
-          onStart={() => {
-            startTTS(text, setIsPlaying);
-          }}
-          onStop={stopTTS}
-        />
-        <_.NewsList>
-          <_.Label>뉴스 기사</_.Label>
-          {isLoading
-            ? "Loading..."
-            : newsList?.map((news, index) => (
+        {isLoading ? (
+          "Loading..."
+        ) : (
+          <>
+            <TTSInputField
+              isPlaying={isPlaying}
+              setIsPlaying={setIsPlaying}
+              value={text}
+              onChange={setText}
+              onStart={() => {
+                startTTS(text, setIsPlaying);
+              }}
+              onStop={stopTTS}
+            />
+            <_.NewsList>
+              <_.Label>뉴스 기사</_.Label>
+              {newsList?.map((news, index) => (
                 <NewsBox
                   key={index}
                   title={news.title}
@@ -90,7 +93,9 @@ export default function Main() {
                   removeNews={() => removeNewsItem(index)}
                 />
               ))}
-        </_.NewsList>
+            </_.NewsList>
+          </>
+        )}
       </_.Content>
       <MenuBar selectState={1} />
     </_.Layout>

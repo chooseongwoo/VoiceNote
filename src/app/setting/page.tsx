@@ -1,15 +1,27 @@
 "use client";
 import MenuBar from "@/components/MenuBar";
 import * as _ from "./style";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Slider from "@/components/Slider";
 
 export default function Setting() {
   const [values, setValues] = useState({
-    speed: Number(localStorage.getItem("speed")) || 1.0,
-    pitch: Number(localStorage.getItem("pitch")) || 0.0,
-    gender: localStorage.getItem("gender") || "NEUTRAL",
+    speed: 1.0,
+    pitch: 0.0,
+    gender: "NEUTRAL",
   });
+
+  useEffect(() => {
+    const storedSpeed = Number(localStorage.getItem("speed")) || 1.0;
+    const storedPitch = Number(localStorage.getItem("pitch")) || 0.0;
+    const storedGender = localStorage.getItem("gender") || "NEUTRAL";
+
+    setValues({
+      speed: storedSpeed,
+      pitch: storedPitch,
+      gender: storedGender,
+    });
+  }, []);
 
   const handleSpeedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newSpeed = Number(event.target.value);

@@ -1,3 +1,4 @@
+"use client"
 import { SetStateAction } from "react";
 
 let currentAudio: HTMLAudioElement | null = null;
