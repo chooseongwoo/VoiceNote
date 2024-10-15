@@ -148,7 +148,8 @@ export default function Playlist() {
             <_.Buttons>
               <Text
                 onClick={() => {
-                  setIsTextModalOpen(!isTextModalOpen);
+                  if (playingIndex !== null)
+                    setIsTextModalOpen(!isTextModalOpen);
                 }}
                 isOpened={isTextModalOpen}
               />
@@ -170,6 +171,7 @@ export default function Playlist() {
                     ) {
                       if (playingIndex !== null) {
                         handlePlayToggle(null);
+                        setIsTextModalOpen(false);
                       } else {
                         handlePlayToggle(0);
                       }
@@ -202,15 +204,20 @@ export default function Playlist() {
         </_.PlayListBox>
       </_.Content>
       <MenuBar selectState={2} />
+      {isTextModalOpen && playingIndex !== null && (
+        <TextModal
+          title={newsList[playingIndex]?.title || ""}
+          description={newsList[playingIndex]?.description || ""}
+          onClose={() => setIsTextModalOpen(false)}
+        />
+      )}
+
       {isTimerModalOpen && (
         <TimerModal
           value={timerValue}
           onClose={() => setIsTimerModalOpen(false)}
           onValueChange={setTimerValue}
         />
-      )}
-      {isTextModalOpen && (
-        <TextModal onClose={() => setIsTextModalOpen(false)} />
       )}
     </_.Layout>
   );
