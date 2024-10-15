@@ -38,6 +38,8 @@ export default function Playlist() {
     }
   }, []);
 
+  const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
+
   const handlePlayToggle = (index: number | null) => {
     if (index !== null) {
       setPlayingIndex(index);
@@ -52,8 +54,19 @@ export default function Playlist() {
         const nextIndex = (index + 1) % newsList.length;
         handlePlayToggle(nextIndex);
       });
+
+      if (timerValue > 0) {
+        if (timerId) clearTimeout(timerId);
+        const id = setTimeout(() => {
+          stopTTS();
+          setPlayingIndex(null);
+        }, timerValue * 60 * 1000);
+        setTimerId(id);
+      }
     } else {
       stopTTS();
+      if (timerId) clearTimeout(timerId);
+      setTimerId(null);
     }
   };
 
@@ -75,11 +88,13 @@ export default function Playlist() {
     );
     setNewsList(updatedNewsList);
     stopTTS();
+    if (timerId) clearTimeout(timerId);
     setPlayingIndex(null);
   };
 
   const handleDeleteAll = () => {
     stopTTS();
+    if (timerId) clearTimeout(timerId);
     setPlayingIndex(null);
     setNewsList([]);
     localStorage.removeItem("savedNews");
@@ -100,12 +115,6 @@ export default function Playlist() {
       });
     }
   }, [playingIndex]);
-
-  const toggleTimerModal = () => {
-    if (!isTextModalOpen) {
-      setIsTimerModalOpen((prev) => !prev);
-    }
-  };
 
   return (
     <_.Layout>
