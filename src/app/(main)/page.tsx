@@ -11,6 +11,7 @@ import he from "he";
 export default function Main() {
   const [text, setText] = useState("");
   const [newsList, setNewsList] = useState<news[] | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const getSavedNews = () => {
@@ -59,6 +60,26 @@ export default function Main() {
     );
   };
 
+  const startTTS = async () => {
+    try {
+      const response = await fetch(
+        `/api/speech?text=${encodeURIComponent(text)}`
+      );
+      if (!response.ok) {
+        throw new Error("TTS 변환 중 오류 발생");
+      }
+
+      const audioBuffer = await response.arrayBuffer();
+      const audioBlob = new Blob([audioBuffer], { type: "audio/wav" });
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audio = new Audio(audioUrl);
+
+      audio.play();
+    } catch (error) {
+      console.error("TTS 변환 중 오류 발생:", error);
+    }
+  };
+
   return (
     <_.Layout>
       <_.Header>
@@ -66,7 +87,13 @@ export default function Main() {
         <_.Title>Voice Note</_.Title>
       </_.Header>
       <_.Content>
-        <TTSInputField value={text} onChange={setText} />
+        <TTSInputField
+          isPlaying={isPlaying}
+          setIsPlaying={setIsPlaying}
+          value={text}
+          onChange={setText}
+          onStart={startTTS}
+        />
         <_.NewsList>
           <_.Label>뉴스 기사</_.Label>
           {isLoading

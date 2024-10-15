@@ -1,44 +1,43 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { promises as fs } from "fs";
-import path from "path";
-import { TextToSpeechClient, protos } from "@google-cloud/text-to-speech";
+import { TextToSpeechClient } from "@google-cloud/text-to-speech";
+import { NextResponse } from "next/server";
+import { protos } from "@google-cloud/text-to-speech";
 
 const client = new TextToSpeechClient();
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method === "POST") {
-    const { text } = req.body;
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const text = searchParams.get("text");
 
-    // TTS 요청을 위한 설정
-    const request = {
-      input: { text },
-      voice: { languageCode: "en-US", ssmlGender: "NEUTRAL" as const },
-      audioConfig: {
-        audioEncoding: protos.google.cloud.texttospeech.v1.AudioEncoding.MP3,
-      },
-    };
+  if (!text) {
+    return NextResponse.json({ error: "텍스트 없음." }, { status: 400 });
+  }
 
-    try {
-      // API 호출하여 음성 파일 생성
-      const [response] = await client.synthesizeSpeech(request);
-      const audioContent = response?.audioContent;
+  try {
+    const request: protos.google.cloud.texttospeech.v1.ISynthesizeSpeechRequest =
+      {
+        input: { text },
+        voice: {
+          languageCode: "ko-KR",
+          ssmlGender:
+            protos.google.cloud.texttospeech.v1.SsmlVoiceGender.NEUTRAL,
+        },
+        audioConfig: {
+          audioEncoding:
+            protos.google.cloud.texttospeech.v1.AudioEncoding.LINEAR16,
+          speakingRate: 1,
+        },
+      };
 
-      if (!audioContent) {
-        throw new Error("오디오 컨텐츠 미싱");
-      }
+    const [response] = await client.synthesizeSpeech(request);
 
-      const filePath = path.resolve("./public", "output.mp3");
-      await fs.writeFile(filePath, audioContent, "binary");
+    const audioBuffer = Buffer.from(response.audioContent as Uint8Array);
+    const headers = new Headers();
+    headers.set("Content-Type", "audio/wav");
+    headers.set("Content-Length", audioBuffer.length.toString());
 
-      res.status(200).json({ message: "음성 파일: output.mp3" });
-    } catch (error) {
-      console.error("Error:", error);
-      res.status(500).json({ error: "TTS 실패" });
-    }
-  } else {
-    res.status(405).json({ message: "POST 요청만 가능" });
+    return new Response(audioBuffer, { headers });
+  } catch (error) {
+    console.error("변환 중 에러", error);
+    return NextResponse.json({ error: "변환 실패" }, { status: 500 });
   }
 }
