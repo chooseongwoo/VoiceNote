@@ -3,6 +3,31 @@ import { protos, TextToSpeechClient } from "@google-cloud/text-to-speech";
 import fs from "fs";
 
 const client = new TextToSpeechClient();
+const createGoogleCredentialsFile = () => {
+  try {
+    if (process.env.GOOGLE_APPLICATION_CREDENTIALS_CONTENTS) {
+      const credentials = Buffer.from(
+        process.env.GOOGLE_APPLICATION_CREDENTIALS_CONTENTS,
+        "base64"
+      ).toString("utf-8");
+      const credentialsPath = "/tmp/my-google-credentials.json";
+
+      if (!fs.existsSync(credentialsPath)) {
+        fs.writeFileSync(credentialsPath, credentials);
+      }
+
+      process.env.GOOGLE_APPLICATION_CREDENTIALS = credentialsPath;
+    } else {
+      console.error(
+        "GOOGLE_APPLICATION_CREDENTIALS_CONTENTS 환경 변수가 설정되지 않았습니다."
+      );
+    }
+  } catch (error) {
+    console.error("파일 생성 실패", error);
+  }
+};
+
+createGoogleCredentialsFile();
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
