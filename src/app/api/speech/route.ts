@@ -4,18 +4,6 @@ import fs from "fs";
 
 const client = new TextToSpeechClient();
 
-
-if (process.env.GOOGLE_APPLICATION_CREDENTIALS_CONTENTS) {
-  const credentials = Buffer.from(
-    process.env.GOOGLE_APPLICATION_CREDENTIALS_CONTENTS,
-    "base64"
-  ).toString("utf-8");
-  if (!fs.existsSync("./keys")) {
-    fs.mkdirSync("./keys");
-  }
-  fs.writeFileSync("./keys/my-google-credentials.json", credentials);
-}
-
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const text = searchParams.get("text");
