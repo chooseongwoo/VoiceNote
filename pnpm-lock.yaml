@@ -14,6 +14,9 @@ importers:
       axios:
         specifier: ^1.7.7
         version: 1.7.7
+      google-auth-library:
+        specifier: ^9.14.2
+        version: 9.14.2
       he:
         specifier: ^1.2.0
         version: 1.2.0
