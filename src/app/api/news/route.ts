@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
 
-const CLIENT_ID = process.env.NEXT_PUBLIC_NAVER_CLIENT_ID;
-const CLIENT_SECRET = process.env.NEXT_PUBLIC_NAVER_CLIENT_SECRET;
+const CLIENT_ID = process.env.NAVER_CLIENT_ID;
+const CLIENT_SECRET = process.env.NAVER_CLIENT_SECRET;
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
