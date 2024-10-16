@@ -1,7 +1,11 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-  swcMinify: true,
+export default {
+  async redirects() {
+    return [
+      {
+        source: "/main",
+        destination: "/",
+        permanent: true,
+      },
+    ];
+  },
 };
-
-export default nextConfig;
