@@ -24,8 +24,9 @@ export default function Main() {
   useEffect(() => {
     const getNewsData = async () => {
       setIsLoading(true);
+      const category = localStorage.getItem("category");
       try {
-        const res = await fetch("/api/news?query=정치");
+        const res = await fetch(`/api/news?query=${category}`);
         const data = await res.json();
 
         if (!data.items) {
